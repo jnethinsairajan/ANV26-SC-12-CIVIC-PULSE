@@ -1,0 +1,680 @@
+CIVICPULSE AI — COMBINED PROJECT FILE
+============================================================
+
+This single file contains the uploaded project files combined in a readable format.
+Duplicate copies with identical contents are included only once.
+
+
+============================================================
+FILE: app.config (2) (2).ts
+============================================================
+
+export default {
+  logoUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/310519664008219705/JozEQNpaaWVCoYIy.svg",
+};
+
+============================================================
+FILE: 8414d33e-0baa-45d0-b42b-07d5fd3fde47 (1)(1).json
+============================================================
+
+{
+  "include": ["client/src/*/", "shared/*/", "server/*/"],
+  "exclude": ["node_modules", "build", "dist", "*/.test.ts"],
+  "compilerOptions": {
+    "target": "ES2022",
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
+    "noEmit": true,
+    "module": "ESNext",
+    "strict": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@/": ["./client/src/"],
+      "@shared/": ["./shared/"]
+    }
+  }
+}
+
+============================================================
+FILE: Dockerfile(1)
+============================================================
+
+FROM node:22-bookworm-slim
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@10.18.0 --activate
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY patches ./patches
+RUN CI=1 pnpm install --frozen-lockfile
+COPY . .
+RUN pnpm build
+ENV NODE_ENV=production
+ENV PORT=3000
+EXPOSE 3000
+CMD ["node", "dist/index.js"]
+
+============================================================
+FILE: package(2).json
+============================================================
+
+{
+  "name": "civicpluse",
+  "version": "1.0.0",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "NODE_ENV=development tsx watch server/_core/index.ts",
+    "build": "vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "start": "NODE_ENV=production node dist/index.js",
+    "check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "db:push": "drizzle-kit generate && drizzle-kit migrate",
+    "db:migrate": "drizzle-kit migrate",
+    "dev:static": "vite --host 0.0.0.0 --port ${PORT:-3000} --strictPort",
+    "build:static": "vite build"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.693.0",
+    "@aws-sdk/s3-request-presigner": "^3.693.0",
+    "@hookform/resolvers": "^5.2.2",
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-aspect-ratio": "^1.1.7",
+    "@radix-ui/react-avatar": "^1.1.10",
+    "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-context-menu": "^2.2.16",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-hover-card": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-menubar": "^1.1.16",
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-radio-group": "^1.3.8",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slider": "^1.3.6",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toggle": "^1.1.10",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "@tanstack/react-query": "^5.90.2",
+    "@trpc/client": "^11.6.0",
+    "@trpc/react-query": "^11.6.0",
+    "@trpc/server": "^11.6.0",
+    "axios": "^1.12.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "cookie": "^1.0.2",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.2",
+    "drizzle-orm": "^0.44.5",
+    "embla-carousel-react": "^8.6.0",
+    "express": "^4.21.2",
+    "framer-motion": "^12.23.22",
+    "input-otp": "^1.4.2",
+    "jose": "6.1.0",
+    "lucide-react": "^0.453.0",
+    "mysql2": "^3.15.0",
+    "nanoid": "^5.1.5",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.1",
+    "react-day-picker": "^9.11.1",
+    "react-dom": "^19.2.1",
+    "react-hook-form": "^7.64.0",
+    "react-resizable-panels": "^3.0.6",
+    "recharts": "^2.15.2",
+    "sonner": "^2.0.7",
+    "streamdown": "^1.4.0",
+    "superjson": "^1.13.3",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7",
+    "vaul": "^1.1.2",
+    "wouter": "^3.3.5",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@builder.io/vite-plugin-jsx-loc": "^0.1.1",
+    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/vite": "^4.1.3",
+    "@types/express": "4.17.21",
+    "@types/google.maps": "^3.58.1",
+    "@types/node": "^24.7.0",
+    "@types/react": "^19.2.1",
+    "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "add": "^2.0.6",
+    "autoprefixer": "^10.4.20",
+    "drizzle-kit": "^0.31.4",
+    "esbuild": "^0.25.0",
+    "pnpm": "10.18.0",
+    "postcss": "^8.4.47",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.19.1",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "5.9.3",
+    "vite": "^7.1.7",
+    "vitest": "^2.1.4"
+  },
+  "packageManager": "pnpm@10.18.0"
+}
+
+============================================================
+FILE: plan(1).md
+============================================================
+
+# Civic Pluse implementation plan
+
+## Product approach
+
+Civic Pluse is a responsive public-accountability workspace branded from the supplied CivicSight AI brief. The first shipped pass is a useful, runnable GovTech MVP: an overview dashboard, project explorer, map-inspired location view, AI transparency panel, timeline details, citizen report flow, alerts, and an admin console surface. The app uses the supplied React/Vite frontend and Express/Drizzle backend rather than introducing a second framework into the initialized starter.
+
+The managed database capability is MySQL-compatible in this Webdev environment, so persistence is modeled with Drizzle/MySQL tables and an additive migration. The API layer is REST-shaped for the product-facing endpoints and remains compatible with the existing tRPC/auth starter. The UI uses realistic sample projects as a graceful public read experience when the database is empty; report submissions are sent to the backend and echoed immediately in the dashboard.
+
+## Architecture and implementation
+
+- client/src/pages/Home.tsx: primary dashboard shell, navigation state, filters, charts, project detail drawer, report dialog, theme toggle, and admin surface.
+- client/src/index.css: Civic Pluse tokens, dark/light themes, responsive layout, map/grid motifs, charts, focus states, and subtle motion.
+- client/src/App.tsx: route entry and switchable theme provider.
+- server/_core/index.ts: health endpoint plus REST endpoints for project data, analytics, alerts, project details, citizen report creation, and AI chat.
+- server/routers.ts: retains auth and adds typed public project/feedback procedures for future authenticated expansion.
+- drizzle/schema.ts: users plus projects, milestones, and citizen reports tables.
+- drizzle/0001_parched_hulk.sql: generated additive database migration with seed-safe schema definitions.
+- public/manus-routes.json: route manifest for the root dashboard.
+- README.md: local development, API, database and deployment instructions.
+
+## Design system
+
+### Design movement
+Civic Pluse follows *editorial civic modernism*: the clarity of public-service wayfinding combined with the calm density of a high-quality intelligence dashboard.
+
+### Core principles
+1. *Evidence before noise* — every large number pairs with a time frame, comparison, or source cue.
+2. *Calm urgency* — risk states are unmistakable without turning the interface into an alarm board.
+3. *Public by default* — project context, status, and accountability actions remain easy to scan.
+4. *Operational clarity* — officials and citizens see the same facts, with role-specific next actions.
+
+### Color philosophy
+A deep ink navy anchors trust and legibility; warm paper surfaces keep the interface human and civic rather than corporate. A signature *signal teal* marks verified progress and live data. Amber and coral are reserved for attention and critical risk, so they retain meaning. Dark mode shifts the paper to ink while preserving the same semantic signals.
+
+### Layout paradigm
+A fixed, compact navigation rail frames an offset editorial canvas. The hero insight spans the main column, while supporting cards align to a 12-column rhythm with deliberate asymmetry: metric cards are compact, the AI panel is a long horizontal signal, and project details open as a right-side drawer rather than a route change.
+
+### Signature elements
+- *Signal line*: a thin teal rule and live-status dot used on section headers, active alerts, and the AI panel.
+- *Civic grid*: low-contrast map/grid textures behind the hero and location view.
+- *Evidence chips*: compact labels that combine a status, a confidence cue, and a data timestamp.
+
+### Interaction and animation
+Interactions should feel direct and inspectable: hover states lift cards by 2px, filters update without navigation, and details open in a drawer with a 180ms ease-out slide. Chart bars animate only on first load. Avoid looping animation; use a pulsing live dot only where it communicates freshness. Keyboard focus is visibly outlined in signal teal.
+
+### Typography
+Use a high-contrast editorial display face for headlines and a neutral sans for interface density. The implementation uses a system serif stack for display text and Inter, ui-sans-serif, system-ui for UI copy, with tabular numerals for finance and progress values.
+
+### Brand essence
+*Civic Pluse turns public project data into a shared, understandable record of progress — for the people who fund it, build it, and live with the outcome.*
+
+Personality: *clear, watchful, constructive*.
+
+### Brand voice
+Headlines are direct and civic, CTAs are specific, and microcopy explains what changed without sounding bureaucratic.
+
+- “See what moved this week.”
+- “Flag the gap, not the person.”
+
+### Wordmark and logo
+The mark is a compact civic signal: a rounded square containing three stacked horizontal bars, with the middle bar extending into a small upward pulse. The wordmark uses “Civic” in the display face and “Pluse” in the interface face to make the product name feel both public and contemporary.
+
+### Signature brand color
+*Signal teal #25C7B6* — ownable, legible on ink and paper, and reserved for verified movement and public participation.
+
+## Delivery scope
+
+Required product behaviors are represented in the UI and API: searchable/filterable public projects; KPI cards; planned vs actual spend; progress and risk states; project locations; timeline and milestone details; citizen feedback categories and status; AI transparency insights with risk score; smart alerts; transparency score; admin update affordance; light/dark mode; responsive mobile layout; health endpoint; route manifest; database schema and migration; sample data; and deployment documentation.
+
+The AI panel is implemented as a clearly labeled simulation-ready insight layer using deterministic sample analysis so the site is immediately useful without requiring an external model key. The server surface is structured so a managed LLM call can be added later without changing the UI contract.
+
+## Chatbot extension
+The public dashboard now includes a floating *Civic Pluse AI* assistant. The browser sends a bounded conversation history to POST /api/chat; the server calls the managed built-in LLM through server/_core/llm.ts, never exposing platform credentials to the client. The server prompt grounds answers in live project, analytics, alert, and report context and explicitly prevents fabricated project facts or pretend report submissions. If the model service is unavailable, a small deterministic civic FAQ fallback keeps the experience useful.
+
+The chat panel follows the existing editorial civic modernism: ink-navy header, signal-teal assistant identity, warm surface bubbles, compact quick prompts, visible AI grounding note, and a fixed lower-right affordance that scales down cleanly on mobile. It is intentionally visitor-independent and does not persist chat transcripts.
+
+============================================================
+FILE: vite.config(1).ts
+============================================================
+
+import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import fs from "node:fs";
+import path from "node:path";
+import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { publicPlatformScript } from "./server/_core/publicConfig";
+
+// =============================================================================
+// Manus Debug Collector - Vite Plugin
+// Writes browser logs directly to files, trimmed when exceeding size limit
+// =============================================================================
+
+const PROJECT_ROOT = import.meta.dirname;
+const LOG_DIR = path.join(PROJECT_ROOT, ".manus-logs");
+const MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024; // 1MB per log file
+const TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6); // Trim to 60% to avoid constant re-trimming
+
+type LogSource = "browserConsole" | "networkRequests" | "sessionReplay";
+
+function ensureLogDir() {
+  if (!fs.existsSync(LOG_DIR)) {
+    fs.mkdirSync(LOG_DIR, { recursive: true });
+  }
+}
+
+function trimLogFile(logPath: string, maxSize: number) {
+  try {
+    if (!fs.existsSync(logPath) || fs.statSync(logPath).size <= maxSize) {
+      return;
+    }
+
+    const lines = fs.readFileSync(logPath, "utf-8").split("\n");
+    const keptLines: string[] = [];
+    let keptBytes = 0;
+
+    // Keep newest lines (from end) that fit within 60% of maxSize
+    const targetSize = TRIM_TARGET_BYTES;
+    for (let i = lines.length - 1; i >= 0; i--) {
+      const lineBytes = Buffer.byteLength(${lines[i]}\n, "utf-8");
+      if (keptBytes + lineBytes > targetSize) break;
+      keptLines.unshift(lines[i]);
+      keptBytes += lineBytes;
+    }
+
+    fs.writeFileSync(logPath, keptLines.join("\n"), "utf-8");
+  } catch {
+    /* ignore trim errors */
+  }
+}
+
+function writeToLogFile(source: LogSource, entries: unknown[]) {
+  if (entries.length === 0) return;
+
+  ensureLogDir();
+  const logPath = path.join(LOG_DIR, ${source}.log);
+
+  // Format entries with timestamps
+  const lines = entries.map((entry) => {
+    const ts = new Date().toISOString();
+    return [${ts}] ${JSON.stringify(entry)};
+  });
+
+  // Append to log file
+  fs.appendFileSync(logPath, ${lines.join("\n")}\n, "utf-8");
+
+  // Trim if exceeds max size
+  trimLogFile(logPath, MAX_LOG_SIZE_BYTES);
+}
+
+/**
+ * Vite plugin to collect browser debug logs
+ * - POST /_manus_/logs: Browser sends logs, written directly to files
+ * - Files: browserConsole.log, networkRequests.log, sessionReplay.log
+ * - Auto-trimmed when exceeding 1MB (keeps newest entries)
+ */
+function vitePluginManusDebugCollector(): Plugin {
+  return {
+    name: "manus-debug-collector",
+
+    transformIndexHtml(html) {
+      if (process.env.NODE_ENV === "production") {
+        return html;
+      }
+      return {
+        html,
+        tags: [
+          {
+            tag: "script",
+            attrs: {
+              src: "/_manus_/debug-collector.js",
+            },
+            injectTo: "head",
+          },
+        ],
+      };
+    },
+
+    configureServer(server: ViteDevServer) {
+      // POST /_manus_/logs: Browser sends logs (written directly to files)
+      server.middlewares.use("/_manus_/logs", (req, res, next) => {
+        if (req.method !== "POST") {
+          return next();
+        }
+
+        const handlePayload = (payload: any) => {
+          // Write logs directly to files
+          if (payload.consoleLogs?.length > 0) {
+            writeToLogFile("browserConsole", payload.consoleLogs);
+          }
+          if (payload.networkRequests?.length > 0) {
+            writeToLogFile("networkRequests", payload.networkRequests);
+          }
+          if (payload.sessionEvents?.length > 0) {
+            writeToLogFile("sessionReplay", payload.sessionEvents);
+          }
+
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ success: true }));
+        };
+
+        const reqBody = (req as { body?: unknown }).body;
+        if (reqBody && typeof reqBody === "object") {
+          try {
+            handlePayload(reqBody);
+          } catch (e) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: String(e) }));
+          }
+          return;
+        }
+
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk.toString();
+        });
+
+        req.on("end", () => {
+          try {
+            const payload = JSON.parse(body);
+            handlePayload(payload);
+          } catch (e) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: String(e) }));
+          }
+        });
+      });
+    },
+  };
+}
+
+// Static development and static publishing use the same public-value whitelist
+// as Express. Runtime-only secrets never enter the browser bundle. Express keeps
+// serving this path dynamically when the application server is selected.
+function vitePluginPublicPlatformConfig(): Plugin {
+  return {
+    name: "manus-public-platform-config",
+    configureServer(server) {
+      server.middlewares.use("/api/platform/config.js", (_req, res) => {
+        res.setHeader("Content-Type", "application/javascript");
+        res.setHeader("Cache-Control", "no-store");
+        res.end(publicPlatformScript());
+      });
+    },
+    generateBundle() {
+      this.emitFile({ type: "asset", fileName: "api/platform/config.js", source: publicPlatformScript() });
+    },
+  };
+}
+
+const plugins = [vitePluginPublicPlatformConfig(), react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
+
+export default defineConfig({
+  plugins,
+  resolve: {
+    alias: {
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+    },
+  },
+  envDir: path.resolve(import.meta.dirname),
+  root: path.resolve(import.meta.dirname, "client"),
+  publicDir: path.resolve(import.meta.dirname, "client", "public"),
+  build: {
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    emptyOutDir: true,
+  },
+  server: {
+    host: true,
+    allowedHosts: [
+      ".manuspre.computer",
+      ".manus.computer",
+      ".manus-asia.computer",
+      ".manuscomputer.ai",
+      ".manusvm.computer",
+      "localhost",
+      "127.0.0.1",
+    ],
+    fs: {
+      strict: true,
+      deny: ["*/."],
+    },
+  },
+});
+
+============================================================
+FILE: vite.config.ts(2).bak
+============================================================
+
+import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import fs from "node:fs";
+import path from "node:path";
+import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+
+// =============================================================================
+// Manus Debug Collector - Vite Plugin
+// Writes browser logs directly to files, trimmed when exceeding size limit
+// =============================================================================
+
+const PROJECT_ROOT = import.meta.dirname;
+const LOG_DIR = path.join(PROJECT_ROOT, ".manus-logs");
+const MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024; // 1MB per log file
+const TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6); // Trim to 60% to avoid constant re-trimming
+
+type LogSource = "browserConsole" | "networkRequests" | "sessionReplay";
+
+function ensureLogDir() {
+  if (!fs.existsSync(LOG_DIR)) {
+    fs.mkdirSync(LOG_DIR, { recursive: true });
+  }
+}
+
+function trimLogFile(logPath: string, maxSize: number) {
+  try {
+    if (!fs.existsSync(logPath) || fs.statSync(logPath).size <= maxSize) {
+      return;
+    }
+
+    const lines = fs.readFileSync(logPath, "utf-8").split("\n");
+    const keptLines: string[] = [];
+    let keptBytes = 0;
+
+    // Keep newest lines (from end) that fit within 60% of maxSize
+    const targetSize = TRIM_TARGET_BYTES;
+    for (let i = lines.length - 1; i >= 0; i--) {
+      const lineBytes = Buffer.byteLength(${lines[i]}\n, "utf-8");
+      if (keptBytes + lineBytes > targetSize) break;
+      keptLines.unshift(lines[i]);
+      keptBytes += lineBytes;
+    }
+
+    fs.writeFileSync(logPath, keptLines.join("\n"), "utf-8");
+  } catch {
+    /* ignore trim errors */
+  }
+}
+
+function writeToLogFile(source: LogSource, entries: unknown[]) {
+  if (entries.length === 0) return;
+
+  ensureLogDir();
+  const logPath = path.join(LOG_DIR, ${source}.log);
+
+  // Format entries with timestamps
+  const lines = entries.map((entry) => {
+    const ts = new Date().toISOString();
+    return [${ts}] ${JSON.stringify(entry)};
+  });
+
+  // Append to log file
+  fs.appendFileSync(logPath, ${lines.join("\n")}\n, "utf-8");
+
+  // Trim if exceeds max size
+  trimLogFile(logPath, MAX_LOG_SIZE_BYTES);
+}
+
+/**
+ * Vite plugin to collect browser debug logs
+ * - POST /_manus_/logs: Browser sends logs, written directly to files
+ * - Files: browserConsole.log, networkRequests.log, sessionReplay.log
+ * - Auto-trimmed when exceeding 1MB (keeps newest entries)
+ */
+function vitePluginManusDebugCollector(): Plugin {
+  return {
+    name: "manus-debug-collector",
+
+    transformIndexHtml(html) {
+      if (process.env.NODE_ENV === "production") {
+        return html;
+      }
+      return {
+        html,
+        tags: [
+          {
+            tag: "script",
+            attrs: {
+              src: "/_manus_/debug-collector.js",
+              defer: true,
+            },
+            injectTo: "head",
+          },
+        ],
+      };
+    },
+
+    configureServer(server: ViteDevServer) {
+      // POST /_manus_/logs: Browser sends logs (written directly to files)
+      server.middlewares.use("/_manus_/logs", (req, res, next) => {
+        if (req.method !== "POST") {
+          return next();
+        }
+
+        const handlePayload = (payload: any) => {
+          // Write logs directly to files
+          if (payload.consoleLogs?.length > 0) {
+            writeToLogFile("browserConsole", payload.consoleLogs);
+          }
+          if (payload.networkRequests?.length > 0) {
+            writeToLogFile("networkRequests", payload.networkRequests);
+          }
+          if (payload.sessionEvents?.length > 0) {
+            writeToLogFile("sessionReplay", payload.sessionEvents);
+          }
+
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ success: true }));
+        };
+
+        const reqBody = (req as { body?: unknown }).body;
+        if (reqBody && typeof reqBody === "object") {
+          try {
+            handlePayload(reqBody);
+          } catch (e) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: String(e) }));
+          }
+          return;
+        }
+
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk.toString();
+        });
+
+        req.on("end", () => {
+          try {
+            const payload = JSON.parse(body);
+            handlePayload(payload);
+          } catch (e) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: String(e) }));
+          }
+        });
+      });
+    },
+  };
+}
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+
+export default defineConfig({
+  plugins,
+  resolve: {
+    alias: {
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+    },
+  },
+  envDir: path.resolve(import.meta.dirname),
+  root: path.resolve(import.meta.dirname, "client"),
+  publicDir: path.resolve(import.meta.dirname, "client", "public"),
+  build: {
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    emptyOutDir: true,
+  },
+  server: {
+    host: true,
+    allowedHosts: [
+      ".manuspre.computer",
+      ".manus.computer",
+      ".manus-asia.computer",
+      ".manuscomputer.ai",
+      ".manusvm.computer",
+      "localhost",
+      "127.0.0.1",
+    ],
+    fs: {
+      strict: true,
+      deny: ["*/."],
+    },
+  },
+});
+
+============================================================
+FILE: vitest.config(1).ts
+============================================================
+
+import { defineConfig } from "vitest/config";
+import path from "path";
+
+const templateRoot = path.resolve(import.meta.dirname);
+
+export default defineConfig({
+  root: templateRoot,
+  resolve: {
+    alias: {
+      "@": path.resolve(templateRoot, "client", "src"),
+      "@shared": path.resolve(templateRoot, "shared"),
+      "@assets": path.resolve(templateRoot, "attached_assets"),
+    },
+  },
+  test: {
+    environment: "node",
+    include: ["server/*/.test.ts", "server/*/.spec.ts"],
+  },
+});
